@@ -26,7 +26,7 @@ when "ubuntu"
     key "http://packages.cloudkick.com/cloudkick.packages.key"
     action :add
   end
-when "centos", "redhat"
+when "amazon", "centos", "redhat", "scientific"
   yum_repository "cloudkick" do
     url "http://packages.cloudkick.com/redhat/$basearch"
     action :add
