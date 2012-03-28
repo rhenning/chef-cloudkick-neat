@@ -48,7 +48,7 @@ Assuming you name the role 'cloudkick', here is the required json:
 
 If you want Cloudkick installed everywhere, we recommend you just add the cloudkick attributes to a base role.
 
-All of the data about the node from Cloudkick is available in node[:cloudkick] - for example: 
+All of the data about the node from Cloudkick is available in node['cloudkick'] - for example:
 
   "cloudkick": {
     "oauth_key": "YOUR KEY HERE",
