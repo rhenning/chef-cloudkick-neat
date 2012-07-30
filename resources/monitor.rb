@@ -23,8 +23,12 @@
 #   * Cloudkick API Documentation: https://support.cloudkick.com/API/2.0
 #
 
+def initialize(*args)
+  super
+  @action = :create
+end
+
 actions :create, :enable, :disable
-default_action :create
 
 attribute :oauth_key, :kind_of => String, :required => true
 attribute :oauth_secret, :kind_of => String, :required => true

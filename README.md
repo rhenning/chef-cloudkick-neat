@@ -6,12 +6,7 @@ Installs and configures the Cloudkick Agent, and integrates it with Chef.
 Requirements
 ============
 
-Requires Chef 0.10.10+
-
-* `chef_gem` in default recipe
-* `default_action` in check and monitor LWRPs
-
-Requires Ohai 0.6.12+ for `node['platform_family']`.
+Forked from Opscode repository and backported to chef < 0.10.10, ohai < 0.6.12
 
 Platform
 --------
@@ -50,7 +45,7 @@ This cookbook contains two Resource Providers:
 
 ## Example Usage:
 
-* Create a Cloudkick Monitor for all of our appservers:
+Create a Cloudkick Monitor for all of our appservers:
 
     cloudkick_monitor "appserver monitor" do
       oauth_key 'xxx'
@@ -59,7 +54,7 @@ This cookbook contains two Resource Providers:
       action :create
     end
 
-* Create a Cloudkick Check for the root partition on our appservers:
+Create a Cloudkick Check for the root partition on our appservers:
 
     cloudkick_check "root check" do
       oauth_key 'xxx'

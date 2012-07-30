@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-case node['platform_family']
-when "debian"
+case node['platform']
+when "debian", "ubuntu"
 
   if node['platform'] == 'ubuntu' && node['platform_version'].to_f >= 11.10
     codename = 'lucid'
@@ -56,7 +56,8 @@ template "/etc/cloudkick.conf" do
   source "cloudkick.conf.erb"
   variables({
     :node_name => node.name,
-    :cloudkick_tags => node.run_list.roles
+    :cloudkick_tags => [node.run_list.roles, node.chef_environment].flatten,
+    :cloudkick_credentials => Chef::EncryptedDataBagItem.load('credentials', 'cloudkick')['cloudkick']
   })
 end
 
@@ -65,16 +66,20 @@ package "cloudkick-agent" do
 end
 
 service "cloudkick-agent" do
-  action [ :enable, :start ]
+  action [ :disable, :start ]
   subscribes :restart, resources(:template => "/etc/cloudkick.conf")
 end
 
 # oauth gem for http://tickets.opscode.com/browse/COOK-797
-chef_gem "oauth"
-chef_gem "cloudkick"
+%w{ oauth cloudkick httparty }.each do |pkg|
+  gem_package pkg do
+    action :install
+  end
+end
 
 ruby_block "cloudkick data load" do
   block do
+    Gem.clear_paths
     require 'oauth'
     require 'cloudkick'
     begin
@@ -85,3 +90,10 @@ ruby_block "cloudkick data load" do
   end
   action :create
 end
+
+if node.recipes.include?("mongodb::source")
+  gem_package "mongo" do
+    action :install
+  end
+end
+
